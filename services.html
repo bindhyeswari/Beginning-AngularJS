@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="bower_components/angular/angular.js"></script>
+    <link rel="stylesheet" href="base.css"/>
+    <script>
+        var app = angular.module('myApp', []).controller('MyController', function ($scope, Github) {
+            $scope.message = 'Hello';
+            Github.get().then(function (config) {
+                $scope.items = config.data.items;
+            });
+        }).controller('OtherController', function ($scope, Github) {
+            $scope.message = 'Hello';
+            Github.get().then(function (config) {
+                $scope.items = config.data.items;
+            });
+        });
+
+        app.factory('Github', function ($http) {
+            // reuse logic / functionality
+            return {
+                // this object is the service object
+                get: function () {
+                    return $http.get('https://api.github.com/search/repositories?q=reactjs');
+                }
+            }
+        });
+
+        app.directive('items', function () {
+            return {
+                // Directive Definition Object
+                templateUrl: 'app/github/_items_directive.html'
+            }
+        });
+
+
+    </script>
+    <style>
+        section {
+            width: 50%;
+            float: left;
+            padding: 1em;
+            border: 1px solid gray;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <section ng-controller="MyController">
+        <h1>MyController</h1>
+        <div items></div>
+    </section>
+
+    <section ng-controller="OtherController">
+        <h1>Controller2</h1>
+        <ul>
+            <li ng-repeat="item in items">
+                {{item.name}}
+            </li>
+        </ul>
+    </section>
+</body>
+</html>`

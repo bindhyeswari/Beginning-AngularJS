@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="base.css"/>
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+        var app = angular.module('myApp', []).controller('MyController', function ($scope) {
+
+        });
+
+        app.run(function ($rootScope) {
+            $rootScope.message = 'This is a message from the rootscope';
+        });
+
+        app.directive('helloPopup', function () {
+            return {
+                // DDO
+                link: function (scope, element, attrs) {
+                    element.on('click', function () {
+                        console.log('Hello from the element!');
+                        console.log(attrs.uid);
+
+                        scope.$apply(function () {
+                            scope.message = 'Hi from James!';
+                        });
+                        console.log(scope.message);
+
+
+                    });
+                }
+            };
+        });
+    </script>
+    <style>
+        div [hello-popup] {
+            background-color: #eee;
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    {{message}}
+    <div ng-controller="MyController">
+        {{message | uppercase}}
+
+        <div data-uid="123589adsf" hello-popup></div>
+        <div hello-popup></div>
+        <div hello-popup></div>
+    </div>
+
+
+
+</body>
+</html>
